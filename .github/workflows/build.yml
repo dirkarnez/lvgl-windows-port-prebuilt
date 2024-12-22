@@ -40,3 +40,18 @@ jobs:
 
       - run: |
           msbuild LVGL.sln /p:configuration=release /t:LvglWindowsSimulator
+
+# D:\a\lvgl-windows-port-prebuilt\lvgl-windows-port-prebuilt\Output\Binaries\Release\x64\LvglWindowsSimulator.exe
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: "Output"
+          filename: "lv_port_pc_visual_studio-${{ github.ref_name }}-${{ matrix.compiler.name }}.zip"
+        
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: "Output/lv_port_pc_visual_studio-${{ github.ref_name }}-${{ matrix.compiler.name }}.zip"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
